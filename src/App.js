@@ -9,6 +9,7 @@ function App() {
     <ChakraProvider>
     <div>
       <TollCalc />
+  
     </div>
     </ChakraProvider>
     </>

@@ -11,7 +11,7 @@ const MapComponent = ({ routes, selectedRoute, onSelectRoute }) => {
       const bounds = decodedPolyline.getBounds();
       mapRef.current.fitBounds(bounds);
     }
-  }, [selectedRoute]);
+  });
 
   const mapRef = React.createRef();
 
