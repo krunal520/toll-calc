@@ -13,7 +13,7 @@ const TollCalc = () => {
 
   const handleCalculateRoutes = async () => {
     try {
-      const apiKey = 'YOUR_API_KEY';
+      const apiKey = 'j2mdnpgDPNpp7b93LGpnpG9H7B2rtpHn';
       const apiUrl = 'https://apis.tollguru.com/toll/v2/origin-destination-waypoints';
 
       const response = await axios.post(apiUrl, {
