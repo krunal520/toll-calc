@@ -1,26 +1,51 @@
-// components/MapComponent.js
-import React, { useEffect } from 'react';
+// MapComponent.js
+
+import React, { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { decode } from '@googlemaps/polyline-codec';
 
-const MapComponent = ({ routes, selectedRoute, onSelectRoute }) => {
+const MapComponent = ({ routes, selectedRoute, onSelectRoute, setFromCity, setToCity }) => {
+  const mapRef = useRef();
+
+  const handleMapClick = (e) => {
+    const { lat, lng } = e.latlng;
+
+    // Example: Set fromCity and toCity alternatively based on the number of clicks
+    if (!selectedRoute || !selectedRoute.overview_polyline || !selectedRoute.overview_polyline.points)
+      return;
+
+    if (!setFromCity || !setToCity) return;
+
+    if (!setFromCity.value) {
+      setFromCity({ value: `Location: ${lat.toFixed(4)}, ${lng.toFixed(4)}` });
+    } else {
+      setToCity({ value: `Location: ${lat.toFixed(4)}, ${lng.toFixed(4)}` });
+    }
+  };
+
   useEffect(() => {
     if (selectedRoute) {
-      const decodedPolyline = L.Polyline.fromEncoded(selectedRoute.overview_polyline.points);
-      const bounds = decodedPolyline.getBounds();
-      mapRef.current.fitBounds(bounds);
-    }
-  });
+      const decodedPolyline = decode(selectedRoute.overview_polyline.points);
+      const coordinates = decodedPolyline.map(point => [point.lat, point.lng]);
+      const bounds = L.polyline(coordinates).getBounds();
 
-  const mapRef = React.createRef();
+      if (mapRef.current) {
+        mapRef.current.fitBounds(bounds);
+      }
+    }
+  }, [selectedRoute]);
 
   return (
     <MapContainer
       center={[0, 0]}
       zoom={13}
       style={{ height: '400px', width: '100%', marginBottom: '20px' }}
-      ref={mapRef}
+      whenCreated={mapInstance => {
+        mapRef.current = mapInstance;
+      }}
+      onClick={handleMapClick} // Handle map click events
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -29,7 +54,7 @@ const MapComponent = ({ routes, selectedRoute, onSelectRoute }) => {
 
       {selectedRoute && (
         <Polyline
-          positions={L.Polyline.fromEncoded(selectedRoute.overview_polyline.points).getLatLngs()}
+          positions={decode(selectedRoute.overview_polyline.points).map(point => [point.lat, point.lng])}
           color="blue"
         />
       )}

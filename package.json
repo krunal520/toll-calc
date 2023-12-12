@@ -2,8 +2,10 @@
   "name": "toll-calc",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://https://apis.tollguru.com/",
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
+    "@googlemaps/polyline-codec": "^1.0.28",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

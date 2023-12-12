@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+
+
+.App {
+  display: flex;
+  
+  padding: 10px;
+}
+
+.TollCalc {
+  width: 60%;
+  /* margin-left: 100px; */
+}
+
+.MapComponent {
+  margin-top: 110px;
+  width: 40%;
+
+  
+}
